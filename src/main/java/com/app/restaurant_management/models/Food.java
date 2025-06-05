@@ -21,20 +21,16 @@ public class Food {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     private String foodName;
 
     private String description;
 
-    @NotNull(message = "จำเป็นต้องใส่ราคา")
-    @DecimalMin(value = "0.0", inclusive = true, message = "ราคาต้องมากกว่าหรือเท่ากับ 0")
     private Double price;
 
     @ManyToOne
     @JoinColumn(name = "menu_id", referencedColumnName = "id")
     private Menu menu;
 
-    @JsonProperty("is_deleted")
-    private boolean isDeleted;
+    private Boolean isDeleted;
 
 }

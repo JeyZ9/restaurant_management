@@ -25,6 +25,5 @@ public class Tables {
     @Min(value = 1, message = "จำนวนที่นั่งห้ามน้อยกว่า 1 ที่นั่ง")
     private Integer numberOfSeats;
 
-    @JsonProperty("isAvailable")
-    private boolean isAvailable;
+    private Boolean isAvailable;
 }

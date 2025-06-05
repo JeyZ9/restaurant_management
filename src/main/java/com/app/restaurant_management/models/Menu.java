@@ -18,6 +18,6 @@ public class Menu {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String name;
+    @NotBlank(message = "จำเป็นต้องใส่ชื่อเมนู")
+    private String menuName;
 }
