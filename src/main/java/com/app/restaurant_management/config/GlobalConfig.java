@@ -1,6 +1,7 @@
 package com.app.restaurant_management.config;
 
 import com.app.restaurant_management.config.security.JwtAuthenticationEntryPoint;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,5 +10,10 @@ public class GlobalConfig {
     @Bean
     public JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint(){
         return new JwtAuthenticationEntryPoint();
+    }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
     }
 }
