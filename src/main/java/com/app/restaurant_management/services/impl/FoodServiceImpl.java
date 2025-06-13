@@ -144,7 +144,11 @@ public class FoodServiceImpl implements FoodService {
 
     private List<FoodResponse> mapToFoodResponse(List<Food> foods){
         return foods.stream()
-                .map(food -> modelMapper.map(food, FoodResponse.class))
+                .map(food -> {
+                    FoodResponse response = modelMapper.map(food, FoodResponse.class);
+                    response.setMenuName(food.getMenu().getMenuName());
+                    return response;
+                })
                 .collect(Collectors.toList());
     }
 

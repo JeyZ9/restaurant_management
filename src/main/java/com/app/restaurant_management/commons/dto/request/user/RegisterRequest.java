@@ -34,7 +34,6 @@ public class RegisterRequest {
     private String username;
 
     @NotBlank(message = "จำเป็นต้องใส่รหัสผ่าน")
-    @JsonIgnore
     @Pattern(
             regexp = "^(?=.*[A-Za-z]).{8,}$",
             message = "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร และต้องมีตัวอักษรอย่างน้อย 1 ตัว"
@@ -42,7 +41,6 @@ public class RegisterRequest {
     private String password;
 
     @NotBlank(message = "จำเป็นต้องยืนยันรหัสผ่าน")
-    @JsonIgnore
     private String ConfirmPassword;
 
     @JsonProperty("is_admin")

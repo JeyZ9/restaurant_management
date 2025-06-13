@@ -35,11 +35,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public static PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();
     }
@@ -50,7 +45,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         authorize
                                 .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
-                                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/v1/auth/**","/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated()
                         ).exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntrypoint)
                         ).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
