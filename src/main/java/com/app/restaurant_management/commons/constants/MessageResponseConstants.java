@@ -11,4 +11,6 @@ public class MessageResponseConstants {
     public final static String LOGIN_ERROR_RESPONSE = "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
     public final static String USERNAME_ALREADY_EXISTS_RESPONSE = "ชื่อผู้ใช้นี้มีอยู่แล้ว";
     public final static String REGISTER_RESPONSE = "ลงชื่อเข้าใช้สำเร็จ";
+
+    public final static String SERVER_ERROR_RESPONSE = "เกิดข้อผิดพลาดภายในระบบ";
 }

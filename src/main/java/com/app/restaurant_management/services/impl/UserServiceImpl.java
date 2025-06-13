@@ -47,15 +47,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String userLogin(LoginRequest login){
-        try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                    login.getUsername(), login.getPassword()
-            ));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return jwtTokenProvider.generateToken(authentication);
-        }catch (AuthenticationException err){
-            throw new BadCredentialsException(MessageResponseConstants.LOGIN_ERROR_RESPONSE, err);
-        }
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                login.getUsername(), login.getPassword()
+        ));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return jwtTokenProvider.generateToken(authentication);
     }
 
     @Override
