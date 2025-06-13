@@ -1,17 +1,23 @@
 package com.app.restaurant_management.services;
 
 import com.app.restaurant_management.commons.dto.request.FoodRequest;
-import com.app.restaurant_management.commons.dto.response.FoodResponse;
+import com.app.restaurant_management.commons.dto.response.food.FoodPageResponse;
+//import com.app.restaurant_management.commons.dto.response.food.FoodResponse;
 import com.app.restaurant_management.models.Food;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public interface FoodService {
-    List<FoodResponse> getAllFood();
+//    List<FoodResponse> getAllFood();
     Optional<Food> getFoodById(Long foodId);
-    Optional<Food> getFoodByName(String foodName);
+//    Optional<Food> getFoodByName(String foodName);
+//    List<FoodResponse> getFoodByMenuName(String menuName);
+    FoodPageResponse searchFoodByKeyword(String keyword, Integer page, Integer size) throws IOException;
     Food addFood(FoodRequest food);
-    Food updateFood(FoodRequest food);
-    void deleteFood(Food food);
+    Food updateFood(Long foodId, FoodRequest food);
+    boolean softDeleteFood(Long foodId);
+    boolean hardDeleteFood(Long foodId);
+    boolean restoreFood(Long foodId);
 }
