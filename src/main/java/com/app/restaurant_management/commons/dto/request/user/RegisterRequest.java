@@ -24,13 +24,16 @@ public class RegisterRequest {
 
     @Email(message = "รูปแบบอีเมลไม่ถูกต้อง")
     @NotBlank(message = "จำเป็นต้องใส่อีเมล")
+    @Column(unique = true)
     private String email;
 
     @NotBlank(message = "จำเป็นต้องใส่เบอร์โทร")
     @Pattern(regexp = "\\d{10}", message = "เบอร์โทรต้องมี 10 หลัก")
+    @Column(unique = true)
     private String phoneNumber;
 
     @NotBlank(message = "จำเป็นต้องใส่ชื่อผู้ใช้")
+    @Column(unique = true)
     private String username;
 
     @NotBlank(message = "จำเป็นต้องใส่รหัสผ่าน")

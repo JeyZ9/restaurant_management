@@ -4,7 +4,7 @@ import com.app.restaurant_management.commons.constants.MessageResponseConstants;
 import com.app.restaurant_management.commons.dto.request.user.LoginRequest;
 import com.app.restaurant_management.commons.dto.request.user.RegisterRequest;
 import com.app.restaurant_management.commons.enums.RoleName;
-import com.app.restaurant_management.commons.exception.ApiErrorException;
+import com.app.restaurant_management.commons.exception.AuthenticationFailException;
 import com.app.restaurant_management.config.security.JwtTokenProvider;
 import com.app.restaurant_management.models.Role;
 import com.app.restaurant_management.models.User;
@@ -13,12 +13,9 @@ import com.app.restaurant_management.repository.UserRepository;
 import com.app.restaurant_management.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -55,9 +52,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String userRegister(RegisterRequest register) {
+    public String userRegister(RegisterRequest register) throws AuthenticationFailException {
         if(userRepository.existsByUsername(register.getUsername())){
-            throw new ApiErrorException(HttpStatus.BAD_REQUEST, MessageResponseConstants.USERNAME_ALREADY_EXISTS_RESPONSE);
+            throw new AuthenticationFailException(MessageResponseConstants.USERNAME_ALREADY_EXISTS_RESPONSE);
+        }
+        if(userRepository.existsByEmail(register.getEmail())){
+            throw new AuthenticationFailException(MessageResponseConstants.EMAIL_ALREADY_EXISTS_RESPONSE);
         }
 
         User user = mapToUser(register);

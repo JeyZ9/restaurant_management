@@ -65,7 +65,7 @@ public class UserController {
 
 //    @PostMapping(path = {"/register", "/signup"})
     @PostMapping(path = "/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest register, BindingResult bindingResult) throws CustomException, AuthenticationFailException {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest register, BindingResult bindingResult) throws AuthenticationFailException {
         if(bindingResult.hasErrors()){
             List<String> errors = bindingResult.getFieldErrors()
                     .stream().map(err -> err.getField() + ": " + err.getDefaultMessage())
@@ -75,11 +75,7 @@ public class UserController {
             response.put("errors", errors);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
-        try {
-            String user = userService.userRegister(register);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        }catch(Exception err) {
-            throw new CustomException(MessageResponseConstants.SERVER_ERROR_RESPONSE);
-        }
+        String user = userService.userRegister(register);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

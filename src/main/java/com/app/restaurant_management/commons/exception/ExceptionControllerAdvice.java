@@ -21,8 +21,11 @@ public class ExceptionControllerAdvice {
     }
 
     @ExceptionHandler(value = AuthenticationFailException.class)
-    public final ResponseEntity<String> handleAuthenticationFailException(AuthenticationFailException exception) {
-        return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+    public final ResponseEntity<?> handleAuthenticationFailException(AuthenticationFailException exception) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of(
+                "status", 409,
+                "error", exception.getMessage()
+        ));
     }
 
     @ExceptionHandler(BadCredentialsException.class)
