@@ -1,7 +1,10 @@
 package com.app.restaurant_management.config.security;
 
+import com.app.restaurant_management.commons.enums.RoleName;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,11 +14,13 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -36,11 +41,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public static PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
         return configuration.getAuthenticationManager();
     }
@@ -50,13 +50,33 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((authorize) ->
                         authorize
-                                .requestMatchers(HttpMethod.GET, "*").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/foods/addFood").hasRole(String.valueOf(RoleName.ADMIN))
+                                .requestMatchers(HttpMethod.PUT, "/api/v1/foods/update").hasRole(String.valueOf(RoleName.ADMIN))
+                                .requestMatchers("/api/v1/auth/**","/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated()
-                        ).exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntrypoint)
+                        ).exceptionHandling(exception -> exception
+                                .authenticationEntryPoint(jwtEntrypoint)
+                                .accessDeniedHandler(accessDeniedHandler())
                         ).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return ((request, response, accessDeniedException) -> {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json");
+            response.getWriter().write(
+                    new ObjectMapper().writeValueAsString(Map.of(
+                            "status", 403,
+                            "error", "Access Denied: You do not have permission to access this resource."
+                    ))
+            );
+        });
     }
 }

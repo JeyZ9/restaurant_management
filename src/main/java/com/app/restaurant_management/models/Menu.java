@@ -11,13 +11,17 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    private String name;
+    @NotBlank(message = "จำเป็นต้องใส่ชื่อเมนู")
+    private String menuName;
+
+    public Menu(String menuName) {
+        this.menuName = menuName;
+    }
 }
