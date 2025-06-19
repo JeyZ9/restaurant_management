@@ -28,5 +28,5 @@ public class FoodRequest {
     private Long menu;
 
     @JsonProperty("is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 }

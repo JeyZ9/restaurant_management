@@ -1,5 +1,6 @@
 package com.app.restaurant_management.config.security;
 
+import com.app.restaurant_management.commons.enums.RoleName;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,7 @@ public class SecurityConfig {
                         authorize
                                 .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/foods/addFood").hasRole(String.valueOf(RoleName.ADMIN))
                                 .requestMatchers("/api/v1/auth/**","/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated()
                         ).exceptionHandling(exception -> exception.authenticationEntryPoint(jwtEntrypoint)

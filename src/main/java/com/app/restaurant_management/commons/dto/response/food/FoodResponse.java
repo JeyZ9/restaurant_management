@@ -11,7 +11,7 @@ public class FoodResponse {
     private String foodName;
     private String description;
     private Double price;
-    private String menuName;
+    private Long menuId;
     @JsonProperty("isDeleted")
     private Boolean isDeleted;
 }

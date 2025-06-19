@@ -1,7 +1,9 @@
 package com.app.restaurant_management.seeders;
 
 import com.app.restaurant_management.commons.enums.RoleName;
+import com.app.restaurant_management.models.Menu;
 import com.app.restaurant_management.models.Role;
+import com.app.restaurant_management.repository.MenuRepository;
 import com.app.restaurant_management.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -14,10 +16,12 @@ import java.util.List;
 public class DatabaseSeeder implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
+    private final MenuRepository menuRepository;
 
     @Autowired
-    public DatabaseSeeder(RoleRepository roleRepository){
+    public DatabaseSeeder(RoleRepository roleRepository, MenuRepository menuRepository){
         this.roleRepository = roleRepository;
+        this.menuRepository = menuRepository;
     }
 
     @Override
@@ -29,6 +33,14 @@ public class DatabaseSeeder implements CommandLineRunner {
             roles.add(new Role(RoleName.MANAGER));
             roles.add(new Role(RoleName.EMPLOYEE));
             roleRepository.saveAll(roles);
+        }
+
+        if(menuRepository.count() == 0L){
+            List<Menu> menus = new ArrayList<>();
+            menus.add(new Menu("ต้ม"));
+            menus.add(new Menu("ผัด/ทอด"));
+            menus.add(new Menu("ยำ"));
+            menuRepository.saveAll(menus);
         }
     }
 }

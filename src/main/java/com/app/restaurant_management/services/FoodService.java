@@ -2,11 +2,9 @@ package com.app.restaurant_management.services;
 
 import com.app.restaurant_management.commons.dto.request.FoodRequest;
 import com.app.restaurant_management.commons.dto.response.food.FoodPageResponse;
-//import com.app.restaurant_management.commons.dto.response.food.FoodResponse;
 import com.app.restaurant_management.models.Food;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 public interface FoodService {

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 public class Menu {
     @Id
@@ -20,4 +20,8 @@ public class Menu {
 
     @NotBlank(message = "จำเป็นต้องใส่ชื่อเมนู")
     private String menuName;
+
+    public Menu(String menuName) {
+        this.menuName = menuName;
+    }
 }

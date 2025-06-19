@@ -30,10 +30,12 @@ public class Orders {
     @Column(nullable = false)
     private LocalDateTime orderDate;
 
-    @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+//    @Enumerated(EnumType.STRING)
+//    private OrderStatus orderStatus;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "table_id", referencedColumnName = "id")
     private Tables tables;
+
+    private boolean isPayment;
 }

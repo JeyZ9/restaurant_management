@@ -47,5 +47,5 @@ public class RegisterRequest {
     private String ConfirmPassword;
 
     @JsonProperty("is_admin")
-    private Boolean isAdmin;
+    private Boolean isAdmin = false;
 }

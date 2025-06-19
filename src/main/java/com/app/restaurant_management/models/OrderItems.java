@@ -1,5 +1,6 @@
 package com.app.restaurant_management.models;
 
+import com.app.restaurant_management.commons.enums.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -28,4 +29,7 @@ public class OrderItems {
     private Food foods;
 
     private Integer quantity;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 }
