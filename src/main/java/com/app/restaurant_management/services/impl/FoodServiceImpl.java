@@ -99,7 +99,7 @@ public class FoodServiceImpl implements FoodService {
         findFood.setDescription(food.getDescription());
         findFood.setPrice(food.getPrice());
 
-        Menu findMenu = menuRepository.findById(food.getMenu()).orElseThrow(() -> new ResourceNotFoundException("Menu", "id", String.valueOf(food.getMenu())));
+        Menu findMenu = menuRepository.findById(food.getMenuId()).orElseThrow(() -> new ResourceNotFoundException("Menu", "id", String.valueOf(food.getMenuId())));
         findFood.setMenu(findMenu);
 
         findFood.setIsDeleted(food.getIsDeleted());

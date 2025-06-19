@@ -25,7 +25,7 @@ public class FoodRequest {
     private Double price;
 
     @NotNull(message = "จำเป็นต้องใส่รหัสเมนู")
-    private Long menu;
+    private Long menuId;
 
     @JsonProperty("is_deleted")
     private Boolean isDeleted = false;
