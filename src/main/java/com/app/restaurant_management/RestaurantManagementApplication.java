@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-@RestController(value = "/restaurant")
 public class RestaurantManagementApplication {
 
 	public static void main(String[] args) {

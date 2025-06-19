@@ -39,18 +39,7 @@ public class UserController {
 
 //    @PostMapping(path = {"/login", "/signin"})
     @PostMapping(path = "/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request, BindingResult bindingResult) throws CustomException {
-        if(bindingResult.hasErrors()){
-            List<String> errors = bindingResult.getFieldErrors()
-                    .stream()
-                    .map(err -> err.getField() + ": " + err.getDefaultMessage())
-                    .toList();
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("status", HttpStatus.BAD_REQUEST.value());
-            response.put("errors", errors);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request) throws CustomException {
         try {
             String token = userService.userLogin(request);
             JwtAuthResponse response = new JwtAuthResponse();
@@ -65,16 +54,7 @@ public class UserController {
 
 //    @PostMapping(path = {"/register", "/signup"})
     @PostMapping(path = "/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest register, BindingResult bindingResult) throws AuthenticationFailException {
-        if(bindingResult.hasErrors()){
-            List<String> errors = bindingResult.getFieldErrors()
-                    .stream().map(err -> err.getField() + ": " + err.getDefaultMessage())
-                    .toList();
-            Map<String, Object> response = new HashMap<>();
-            response.put("status", HttpStatus.BAD_REQUEST.value());
-            response.put("errors", errors);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest register) throws AuthenticationFailException  {
         String user = userService.userRegister(register);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
