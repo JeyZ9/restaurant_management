@@ -1,8 +1,10 @@
 package com.app.restaurant_management.services.impl;
 
+import com.app.restaurant_management.commons.constants.MessageResponseConstants;
 import com.app.restaurant_management.commons.dto.request.FoodRequest;
 import com.app.restaurant_management.commons.dto.response.food.FoodPageResponse;
 import com.app.restaurant_management.commons.dto.response.food.FoodResponse;
+import com.app.restaurant_management.commons.exception.CustomException;
 import com.app.restaurant_management.commons.exception.ResourceNotFoundException;
 import com.app.restaurant_management.models.Food;
 import com.app.restaurant_management.models.Menu;
@@ -87,24 +89,32 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public Food addFood(FoodRequest food) {
-        Food mapFood = mapToEntity(food);
-        return foodRepository.save(mapFood);
+    public Food addFood(FoodRequest food) throws CustomException {
+        try {
+            Food mapFood = mapToEntity(food);
+            return foodRepository.save(mapFood);
+        }catch (Exception ex){
+            throw new CustomException(MessageResponseConstants.SERVER_ERROR_RESPONSE);
+        }
     }
 
     @Override
-    public Food updateFood(Long foodId, FoodRequest food) {
-        Food findFood = foodRepository.findById(foodId).orElseThrow(() -> new ResourceNotFoundException("Food", "id", String.valueOf(foodId)));
-        findFood.setFoodName(food.getFoodName());
-        findFood.setDescription(food.getDescription());
-        findFood.setPrice(food.getPrice());
+    public Food updateFood(Long foodId, FoodRequest food) throws CustomException {
+        try {
+            Food findFood = foodRepository.findById(foodId).orElseThrow(() -> new ResourceNotFoundException("Food", "id", String.valueOf(foodId)));
+            findFood.setFoodName(food.getFoodName());
+            findFood.setDescription(food.getDescription());
+            findFood.setPrice(food.getPrice());
 
-        Menu findMenu = menuRepository.findById(food.getMenuId()).orElseThrow(() -> new ResourceNotFoundException("Menu", "id", String.valueOf(food.getMenuId())));
-        findFood.setMenu(findMenu);
+            Menu findMenu = menuRepository.findById(food.getMenuId()).orElseThrow(() -> new ResourceNotFoundException("Menu", "id", String.valueOf(food.getMenuId())));
+            findFood.setMenu(findMenu);
 
-        findFood.setIsDeleted(food.getIsDeleted());
+            findFood.setIsDeleted(food.getIsDeleted());
 
-        return foodRepository.save(findFood);
+            return foodRepository.save(findFood);
+        }catch (Exception ex){
+            throw new CustomException(MessageResponseConstants.SERVER_ERROR_RESPONSE);
+        }
     }
 
     @Override

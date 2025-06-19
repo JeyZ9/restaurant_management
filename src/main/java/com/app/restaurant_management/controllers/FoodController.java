@@ -4,6 +4,7 @@ import com.app.restaurant_management.commons.constants.MessageResponseConstants;
 import com.app.restaurant_management.commons.constants.PathConstants;
 import com.app.restaurant_management.commons.dto.request.FoodRequest;
 import com.app.restaurant_management.commons.dto.response.food.FoodPageResponse;
+import com.app.restaurant_management.commons.exception.CustomException;
 import com.app.restaurant_management.commons.exception.ResourceNotFoundException;
 import com.app.restaurant_management.config.ApiResponse;
 import com.app.restaurant_management.models.Food;
@@ -35,7 +36,7 @@ public class FoodController {
 
     @GetMapping("/search")
     public ResponseEntity<ApiResponse<Object>> searchFood(
-            @Valid @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(defaultValue = "") String keyword,
             @RequestParam(defaultValue = "0") Integer page,
             @RequestParam(defaultValue = "10") Integer size
     ) throws IOException {
@@ -45,10 +46,17 @@ public class FoodController {
     }
 
     @PostMapping("/addFood")
-    public ResponseEntity<ApiResponse<Food>> addFood(@Valid @RequestBody FoodRequest foodRequest) {
+    public ResponseEntity<ApiResponse<Food>> addFood(@Valid @RequestBody FoodRequest foodRequest) throws CustomException {
         Food food = foodService.addFood(foodRequest);
         ApiResponse<Food> response = new ApiResponse<>("201", MessageResponseConstants.CREATE_RESPONSE, food);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ApiResponse<Food>> updateFood(@RequestParam Long foodId, @Valid @RequestBody FoodRequest newFood) throws CustomException {
+        Food food = foodService.updateFood(foodId, newFood);
+        ApiResponse<Food> response = new ApiResponse<>(String.valueOf(HttpStatus.OK.value()), MessageResponseConstants.UPDATE_RESPONSE, food);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
