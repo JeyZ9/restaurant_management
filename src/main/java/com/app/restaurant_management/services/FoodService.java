@@ -9,10 +9,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 public interface FoodService {
-//    List<FoodResponse> getAllFood();
     Optional<Food> getFoodById(Long foodId);
-//    Optional<Food> getFoodByName(String foodName);
-//    List<FoodResponse> getFoodByMenuName(String menuName);
     FoodPageResponse searchFoodByKeyword(String keyword, Integer page, Integer size) throws IOException;
     Food addFood(FoodRequest food) throws CustomException;
     Food updateFood(Long foodId, FoodRequest food) throws CustomException;

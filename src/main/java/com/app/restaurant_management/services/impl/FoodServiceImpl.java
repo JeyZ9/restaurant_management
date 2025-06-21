@@ -47,18 +47,6 @@ public class FoodServiceImpl implements FoodService {
         return Optional.of(findFood);
     }
 
-//    @Override
-//    public Optional<Food> getFoodByName(String foodName) {
-//        Food findFood = foodRepository.findFoodByFoodName(foodName).orElseThrow(() -> new ResourceNotFoundException("food", "name", foodName));
-//        return Optional.of(findFood);
-//    }
-
-//    @Override
-//    public List<FoodResponse> getFoodByMenuName(String menuName) {
-//        List<Food> findFood = foodRepository.findByMenu_MenuName(menuName);
-//        return mapToFoodResponse(findFood);
-//    }
-
     @Override
     public FoodPageResponse searchFoodByKeyword(String keyword, Integer page, Integer size) throws IOException {
         try {

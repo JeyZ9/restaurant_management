@@ -59,5 +59,40 @@ public class FoodController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PostMapping("/softDelete")
+    public ResponseEntity<?> softDelete(@RequestParam Long foodId) {
+        ApiResponse<Object> response;
+        boolean remove = foodService.softDeleteFood(foodId);
+        if(remove){
+            response = new ApiResponse<>("200", MessageResponseConstants.DELETE_RESPONSE, remove);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        response = new ApiResponse<>(String.valueOf(HttpStatus.BAD_REQUEST.value()), MessageResponseConstants.CAN_NOT_DELETE_RESPONSE, remove);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/hardDeleteFood")
+    public ResponseEntity<?> hardDelete(@RequestParam Long foodId) {
+        ApiResponse<Object> response;
+        boolean delete = foodService.hardDeleteFood(foodId);
+        if (delete){
+            response = new ApiResponse<>("200", MessageResponseConstants.HEARD_DELETE_RESPONSE, delete);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        }
+        response = new ApiResponse<>(String.valueOf(HttpStatus.BAD_REQUEST.value()), MessageResponseConstants.CAN_NOT_DELETE_RESPONSE, delete);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("/restore")
+    public ResponseEntity<ApiResponse<Object>> restore(@RequestParam Long foodId) {
+        ApiResponse<Object> response;
+        boolean restore = foodService.restoreFood(foodId);
+        if(restore){
+            response = new ApiResponse<>("200", MessageResponseConstants.RESTORE_RESPONSE, restore);
+            return ResponseEntity.ok(response);
+        }
+        response = new ApiResponse<>(String.valueOf(HttpStatus.BAD_REQUEST.value()), MessageResponseConstants.CAN_NOT_RESTORE_RESPONSE, restore);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
 }
