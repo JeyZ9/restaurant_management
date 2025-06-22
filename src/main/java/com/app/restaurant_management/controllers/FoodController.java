@@ -72,7 +72,7 @@ public class FoodController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @PostMapping("/hardDelete")
+    @DeleteMapping("/hardDelete")
     public ResponseEntity<?> hardDelete(@RequestParam Long foodId) throws CustomException {
         ApiResponse<Object> response;
         boolean delete = foodService.hardDeleteFood(foodId);
