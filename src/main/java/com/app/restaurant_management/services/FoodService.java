@@ -13,7 +13,7 @@ public interface FoodService {
     FoodPageResponse searchFoodByKeyword(String keyword, Integer page, Integer size) throws IOException;
     Food addFood(FoodRequest food) throws CustomException;
     Food updateFood(Long foodId, FoodRequest food) throws CustomException;
-    boolean softDeleteFood(Long foodId);
-    boolean hardDeleteFood(Long foodId);
-    boolean restoreFood(Long foodId);
+    boolean softDeleteFood(Long foodId) throws CustomException;
+    boolean hardDeleteFood(Long foodId) throws CustomException;
+    boolean restoreFood(Long foodId) throws CustomException;
 }

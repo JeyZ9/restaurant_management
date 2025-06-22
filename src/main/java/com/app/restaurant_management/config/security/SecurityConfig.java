@@ -50,7 +50,7 @@ public class SecurityConfig {
                         authorize
                                 .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/v1/foods/addFood", "/api/v1/foods/restore", "/api/v1/foods/softDelete", "/api/v1/foods/hardDeleteFood").hasRole(String.valueOf(RoleName.ADMIN))
+                                .requestMatchers(HttpMethod.POST, "/api/v1/foods/add", "/api/v1/foods/restore", "/api/v1/foods/softDelete", "/api/v1/foods/hardDelete").hasRole(String.valueOf(RoleName.ADMIN))
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/foods/update").hasRole(String.valueOf(RoleName.ADMIN))
                                 .requestMatchers("/api/v1/auth/**","/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                                 .anyRequest().authenticated()

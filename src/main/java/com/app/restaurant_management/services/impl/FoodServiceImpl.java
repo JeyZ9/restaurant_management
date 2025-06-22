@@ -100,44 +100,54 @@ public class FoodServiceImpl implements FoodService {
             findFood.setIsDeleted(food.getIsDeleted());
 
             return foodRepository.save(findFood);
+        }catch (ResourceNotFoundException ex){
+            throw ex;
         }catch (Exception ex){
             throw new CustomException(MessageResponseConstants.SERVER_ERROR_RESPONSE);
         }
     }
 
     @Override
-    public boolean softDeleteFood(Long foodId) {
-        Food findFood = foodRepository.findById(foodId).orElseThrow(() -> new ResourceNotFoundException("Food", "id", String.valueOf(foodId)));
-        if(!findFood.getIsDeleted()){
+    public boolean softDeleteFood(Long foodId) throws CustomException {
+        try{
+            Food findFood = foodRepository.findById(foodId).orElseThrow(() -> new ResourceNotFoundException("Food", "id", String.valueOf(foodId)));
             findFood.setIsDeleted(true);
             foodRepository.save(findFood);
             return true;
+        }catch (ResourceNotFoundException ex){
+            throw ex;
+        }catch (Exception ex){
+            throw new CustomException(MessageResponseConstants.SERVER_ERROR_RESPONSE);
         }
 
-        return false;
     }
 
     @Override
-    public boolean hardDeleteFood(Long foodId) {
-        Food findFood = foodRepository.findById(foodId).orElseThrow(() -> new ResourceNotFoundException("Food", "id", String.valueOf(foodId)));
-        if(findFood.getIsDeleted()){
+    public boolean hardDeleteFood(Long foodId) throws CustomException {
+        try{
+            Food findFood = foodRepository.findById(foodId).orElseThrow(() -> new ResourceNotFoundException("Food", "id", String.valueOf(foodId)));
             foodRepository.delete(findFood);
             return true;
+        }catch (ResourceNotFoundException ex) {
+            throw ex;
+        }catch (Exception ex) {
+            throw new CustomException(MessageResponseConstants.SERVER_ERROR_RESPONSE);
         }
 
-        return false;
     }
 
     @Override
-    public boolean restoreFood(Long foodId) {
-        Food findFood = foodRepository.findById(foodId).orElseThrow(() -> new ResourceNotFoundException("Food", "id", String.valueOf(foodId)));
-        if(findFood.getIsDeleted()){
+    public boolean restoreFood(Long foodId) throws CustomException {
+        try {
+            Food findFood = foodRepository.findById(foodId).orElseThrow(() -> new ResourceNotFoundException("Food", "id", String.valueOf(foodId)));
             findFood.setIsDeleted(false);
             foodRepository.save(findFood);
             return true;
+        }catch (ResourceNotFoundException ex){
+            throw ex;
+        }catch (Exception ex){
+            throw new CustomException(MessageResponseConstants.SERVER_ERROR_RESPONSE);
         }
-
-        return false;
     }
 
     private List<FoodResponse> mapToFoodResponse(List<Food> foods){
