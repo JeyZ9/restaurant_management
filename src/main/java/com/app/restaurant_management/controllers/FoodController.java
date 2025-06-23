@@ -4,17 +4,22 @@ import com.app.restaurant_management.commons.constants.MessageResponseConstants;
 import com.app.restaurant_management.commons.constants.PathConstants;
 import com.app.restaurant_management.commons.dto.request.FoodRequest;
 import com.app.restaurant_management.commons.dto.response.food.FoodPageResponse;
-import com.app.restaurant_management.commons.dto.response.food.FoodResponse;
 import com.app.restaurant_management.commons.exception.CustomException;
 import com.app.restaurant_management.commons.exception.ResourceNotFoundException;
 import com.app.restaurant_management.config.ApiResponse;
 import com.app.restaurant_management.models.Food;
 import com.app.restaurant_management.services.impl.FoodServiceImpl;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -22,10 +27,13 @@ import java.io.IOException;
 @RequestMapping(PathConstants.FOOD)
 public class FoodController {
     private final FoodServiceImpl foodService;
+    private final ObjectMapper objectMapper;
+    private static final Logger logger = LoggerFactory.getLogger(FoodController.class);
 
     @Autowired
-    public FoodController(FoodServiceImpl foodService) {
+    public FoodController(FoodServiceImpl foodService, ObjectMapper objectMapper) {
         this.foodService = foodService;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping(path = "/{foodId}")
@@ -46,16 +54,39 @@ public class FoodController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<ApiResponse<Food>> addFood(@Valid @RequestBody FoodRequest foodRequest) throws CustomException {
-        Food food = foodService.addFood(foodRequest);
+    @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<Food>> addFood(
+//            @ModelAttribute @Valid FoodRequest foodRequest,
+            @RequestParam("foodName") String foodName,
+            @RequestParam("description") String description,
+            @RequestParam("price") Double price,
+            @RequestParam("menuId") Long menuId,
+            @RequestParam("image") MultipartFile image) throws CustomException, JsonProcessingException {
+        FoodRequest foodRequest = new FoodRequest();
+        foodRequest.setFoodName(foodName);
+        foodRequest.setDescription(description);
+        foodRequest.setPrice(price);
+        foodRequest.setMenuId(menuId);
+//        foodRequest.setIsDeleted(isDeleted);
+        logger.debug("Test add {}", objectMapper.writeValueAsString(foodRequest));
+        Food food = foodService.addFood(foodRequest, image);
         ApiResponse<Food> response = new ApiResponse<>("201", MessageResponseConstants.CREATE_RESPONSE, food);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<ApiResponse<Food>> updateFood(@RequestParam Long foodId, @Valid @RequestBody FoodRequest newFood) throws CustomException {
-        Food food = foodService.updateFood(foodId, newFood);
+    @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ApiResponse<Food>> updateFood(@RequestParam Long foodId,
+                                                        @RequestParam("foodName") String foodName,
+                                                        @RequestParam("description") String description,
+                                                        @RequestParam("price") Double price,
+                                                        @RequestParam("menuId") Long menuId,
+                                                        @RequestParam MultipartFile image) throws CustomException, IOException {
+        FoodRequest newFood = new FoodRequest();
+        newFood.setFoodName(foodName);
+        newFood.setDescription(description);
+        newFood.setPrice(price);
+        newFood.setMenuId(menuId);
+        Food food = foodService.updateFood(foodId, newFood, image);
         ApiResponse<Food> response = new ApiResponse<>(String.valueOf(HttpStatus.OK.value()), MessageResponseConstants.UPDATE_RESPONSE, food);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

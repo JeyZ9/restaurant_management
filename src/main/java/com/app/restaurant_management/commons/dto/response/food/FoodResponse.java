@@ -9,6 +9,7 @@ import lombok.Setter;
 public class FoodResponse {
     private Long id;
     private String foodName;
+    private String image;
     private String description;
     private Double price;
     private Long menuId;

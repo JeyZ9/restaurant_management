@@ -19,9 +19,18 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 5MB
+      max-file-size: 5MB
+
 jwt-secret: "91269b51685854a2fd44cea280aa2873917b548cdb131692ae0ec534d2032c10"
 jwt-expiration: 604800000
 
 #springdoc:
 #  swagger-ui:
 #    path: /docs
+
+file:
+  uploads-dir: "./uploads"

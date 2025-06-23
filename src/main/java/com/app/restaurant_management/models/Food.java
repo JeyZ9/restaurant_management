@@ -17,7 +17,10 @@ public class Food {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String foodName;
+
+    private String image;
 
     private String description;
 
@@ -28,5 +31,14 @@ public class Food {
     private Menu menu;
 
     private Boolean isDeleted;
+
+//    public Food(String foodName, String image, String description, Double price, Menu menu){
+//        this.foodName = foodName;
+//        this.image = image;
+//        this.description = description;
+//        this.price = price;
+//        this.menu = menu;
+//        this.isDeleted = false;
+//    }
 
 }
