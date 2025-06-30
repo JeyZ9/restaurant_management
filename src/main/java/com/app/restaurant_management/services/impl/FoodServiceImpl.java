@@ -58,7 +58,7 @@ public class FoodServiceImpl implements FoodService {
 
 
     @Override
-    public Optional<Food> getFoodById(Long foodId) {
+    public Optional<Food> getById(Long foodId) {
         Food findFood = foodRepository.findById(foodId).orElseThrow(() -> new ResourceNotFoundException("food", "id", String.valueOf(foodId)));
         return Optional.of(findFood);
     }
@@ -93,7 +93,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public Food addFood(FoodRequest food, MultipartFile image) throws CustomException {
+    public Food create(FoodRequest food, MultipartFile image) throws CustomException {
         try {
             Food mapFood = mapToEntity(food);
             logger.debug("Add {}", objectMapper.writeValueAsString(mapFood));
@@ -110,7 +110,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public Food updateFood(Long foodId, FoodRequest food, MultipartFile image) throws CustomException, IOException {
+    public Food update(Long foodId, FoodRequest food, MultipartFile image) throws CustomException, IOException {
         try {
             Food findFood = foodRepository.findById(foodId).orElseThrow(() -> new ResourceNotFoundException("Food", "id", String.valueOf(foodId)));
             findFood.setFoodName(food.getFoodName());

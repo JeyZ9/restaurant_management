@@ -3,8 +3,10 @@ package com.app.restaurant_management.seeders;
 import com.app.restaurant_management.commons.enums.RoleName;
 import com.app.restaurant_management.models.Menu;
 import com.app.restaurant_management.models.Role;
+import com.app.restaurant_management.models.Tables;
 import com.app.restaurant_management.repository.MenuRepository;
 import com.app.restaurant_management.repository.RoleRepository;
+import com.app.restaurant_management.repository.TableRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -17,11 +19,13 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
     private final MenuRepository menuRepository;
+    private final TableRepository tableRepository;
 
     @Autowired
-    public DatabaseSeeder(RoleRepository roleRepository, MenuRepository menuRepository){
+    public DatabaseSeeder(RoleRepository roleRepository, MenuRepository menuRepository, TableRepository tableRepository){
         this.roleRepository = roleRepository;
         this.menuRepository = menuRepository;
+        this.tableRepository = tableRepository;
     }
 
     @Override
@@ -41,6 +45,19 @@ public class DatabaseSeeder implements CommandLineRunner {
             menus.add(new Menu("ผัด/ทอด"));
             menus.add(new Menu("ยำ"));
             menuRepository.saveAll(menus);
+        }
+
+        if(menuRepository.count() == 0L) {
+            List<Tables> tablesList = new ArrayList<>();
+            tablesList.add(new Tables(4, false));
+            tablesList.add(new Tables(4, false));
+            tablesList.add(new Tables(4, false));
+            tablesList.add(new Tables(3, false));
+            tablesList.add(new Tables(3, false));
+            tablesList.add(new Tables(2, false));
+            tablesList.add(new Tables(2, false));
+            tablesList.add(new Tables(2, false));
+            tableRepository.saveAll(tablesList);
         }
     }
 }

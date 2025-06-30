@@ -24,4 +24,9 @@ public class Tables {
     private Integer numberOfSeats;
 
     private Boolean isAvailable;
+
+    public Tables(Integer numberOfSeats, Boolean isAvailable) {
+        this.numberOfSeats = numberOfSeats;
+        this.isAvailable = isAvailable;
+    }
 }

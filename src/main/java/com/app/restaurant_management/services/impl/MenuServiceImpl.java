@@ -1,10 +1,11 @@
-package com.app.restaurant_management.services;
+package com.app.restaurant_management.services.impl;
 
 import com.app.restaurant_management.commons.constants.MessageResponseConstants;
 import com.app.restaurant_management.commons.exception.CustomException;
 import com.app.restaurant_management.commons.exception.ResourceNotFoundException;
 import com.app.restaurant_management.models.Menu;
 import com.app.restaurant_management.repository.MenuRepository;
+import com.app.restaurant_management.services.BaseService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -15,19 +16,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class MenuService {
+public class MenuServiceImpl implements BaseService<Menu, Long> {
 
     private final MenuRepository menuRepository;
-    private static final Logger logger = LoggerFactory.getLogger(MenuService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MenuServiceImpl.class);
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public MenuService(MenuRepository menuRepository, ObjectMapper objectMapper){
+    public MenuServiceImpl(MenuRepository menuRepository, ObjectMapper objectMapper){
         this.menuRepository = menuRepository;
         this.objectMapper = objectMapper;
     }
 
-    public List<Menu> getAllMenus() throws CustomException {
+    @Override
+    public List<Menu> getAll() throws CustomException {
         List<Menu> menus = menuRepository.findAll();
         if(menus.isEmpty()){
             throw new CustomException(String.format(MessageResponseConstants.DATA_NOT_FOUND_RESPONSE, "Menu"));
@@ -35,27 +37,31 @@ public class MenuService {
         return menus;
     }
 
-    public Menu getMenuById(Long menuId) {
+    @Override
+    public Menu getById(Long menuId) {
         return menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "id", String.valueOf(menuId)));
 
     }
 
-    public List<Menu> getMenuByName(String menuName) throws CustomException {
-        return  getAllMenus().stream().filter(menu -> menu.getMenuName().toLowerCase().contains(menuName.toLowerCase())).toList();
+    public List<Menu> getByName(String menuName) throws CustomException {
+        return  getAll().stream().filter(menu -> menu.getMenuName().toLowerCase().contains(menuName.toLowerCase())).toList();
     }
 
-    public Menu addMenu(Menu menu) throws JsonProcessingException {
+    @Override
+    public Menu create(Menu menu) throws JsonProcessingException {
         logger.debug("Object menu: {}", objectMapper.writeValueAsString(menu));
         return menuRepository.save(menu);
     }
 
-    public Menu updateMenu(Long menuId, Menu newMenu){
+    @Override
+    public Menu update(Long menuId, Menu newMenu){
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "id", String.valueOf(menuId)));
         menu.setMenuName(newMenu.getMenuName());
         return menuRepository.save(menu);
     }
 
-    public boolean deleteMenu(Long menuId) throws CustomException {
+    @Override
+    public boolean delete(Long menuId) throws CustomException {
         try {
             Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new ResourceNotFoundException("Menu", "id", String.valueOf(menuId)));
             menuRepository.delete(menu);

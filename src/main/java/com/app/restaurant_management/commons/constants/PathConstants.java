@@ -9,4 +9,6 @@ public class PathConstants {
     public static final String FOOD = API_V1 + "/foods";
 
     public static final String MENU = API_V1 + "/menu";
+
+    public static final String TABLE = API_V1 + "/tables";
 }

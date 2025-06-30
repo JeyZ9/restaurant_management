@@ -10,10 +10,12 @@ import java.io.IOException;
 import java.util.Optional;
 
 public interface FoodService {
-    Optional<Food> getFoodById(Long foodId);
+    Optional<Food> getById(Long foodId);
     FoodPageResponse searchFoodByKeyword(String keyword, Integer page, Integer size) throws IOException;
-    Food addFood(FoodRequest food, MultipartFile image) throws CustomException, IOException;
-    Food updateFood(Long foodId, FoodRequest food, MultipartFile image) throws CustomException, IOException;
+//    Food addFood(FoodRequest food, MultipartFile image) throws CustomException, IOException;
+    //    Food updateFood(Long foodId, FoodRequest food, MultipartFile image) throws CustomException, IOException;
+    Food create(FoodRequest food, MultipartFile image) throws CustomException;
+    Food update(Long foodId, FoodRequest food, MultipartFile image) throws CustomException, IOException;
     boolean softDeleteFood(Long foodId) throws CustomException;
     boolean hardDeleteFood(Long foodId) throws CustomException;
     boolean restoreFood(Long foodId) throws CustomException;

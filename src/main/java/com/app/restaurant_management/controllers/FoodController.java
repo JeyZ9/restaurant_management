@@ -11,7 +11,6 @@ import com.app.restaurant_management.models.Food;
 import com.app.restaurant_management.services.impl.FoodServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +36,8 @@ public class FoodController {
     }
 
     @GetMapping(path = "/{foodId}")
-    public ResponseEntity<ApiResponse<Food>> getFoodById(@PathVariable Long foodId){
-        Food food = foodService.getFoodById(foodId).orElseThrow(() -> new ResourceNotFoundException("Food", "id", String.valueOf(foodId)));
+    public ResponseEntity<ApiResponse<Food>> getById(@PathVariable Long foodId){
+        Food food = foodService.getById(foodId).orElseThrow(() -> new ResourceNotFoundException("Food", "id", String.valueOf(foodId)));
         ApiResponse<Food> response = new ApiResponse<>("200", MessageResponseConstants.GET_RESPONSE, food);
         return ResponseEntity.ok(response);
     }
@@ -55,7 +54,7 @@ public class FoodController {
     }
 
     @PostMapping(value = "/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<Food>> addFood(
+    public ResponseEntity<ApiResponse<Food>> create(
 //            @ModelAttribute @Valid FoodRequest foodRequest,
             @RequestParam("foodName") String foodName,
             @RequestParam("description") String description,
@@ -69,13 +68,13 @@ public class FoodController {
         foodRequest.setMenuId(menuId);
 //        foodRequest.setIsDeleted(isDeleted);
         logger.debug("Test add {}", objectMapper.writeValueAsString(foodRequest));
-        Food food = foodService.addFood(foodRequest, image);
+        Food food = foodService.create(foodRequest, image);
         ApiResponse<Food> response = new ApiResponse<>("201", MessageResponseConstants.CREATE_RESPONSE, food);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<ApiResponse<Food>> updateFood(@RequestParam Long foodId,
+    public ResponseEntity<ApiResponse<Food>> update(@RequestParam Long foodId,
                                                         @RequestParam("foodName") String foodName,
                                                         @RequestParam("description") String description,
                                                         @RequestParam("price") Double price,
@@ -86,7 +85,7 @@ public class FoodController {
         newFood.setDescription(description);
         newFood.setPrice(price);
         newFood.setMenuId(menuId);
-        Food food = foodService.updateFood(foodId, newFood, image);
+        Food food = foodService.update(foodId, newFood, image);
         ApiResponse<Food> response = new ApiResponse<>(String.valueOf(HttpStatus.OK.value()), MessageResponseConstants.UPDATE_RESPONSE, food);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
